@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'/>
+		<title>Simulação de Pêndulo de Torção</title>
+		<script type="text/javascript">
+			var pendulo, theta_0, omega_0, omega, time, I, k, dt, mhs;
+
+			function update(){
+				// Equacao
+				// theta = theta_0 * cos(omega * t) + (omega_0 / omega) * sin(omega * t)
+				
+				theta = theta_0 * Math.cos(omega * (time / 1000)) + (omega_0 / omega) * Math.sin(omega * (time / 1000));
+				pendulo.style.WebkitTransform = "rotate(" + theta + "rad)";
+				pendulo.style.MozTransform = "rotate(" + theta + "rad)";
+				pendulo.style.msTransform = "rotate(" + theta + "rad)";
+				pendulo.style.OTransform = "rotate(" + theta + "rad)";
+				pendulo.style.transform = "rotate(" + theta + "rad)";
+				time = time + dt;
+			}
+
+			function start(){
+				pendulo = document.getElementById('pendulo');
+
+				theta_0 = document.getElementById('angulo').value;
+				theta_0 = (theta_0 * Math.PI) / 180;
+				omega_0 = document.getElementById('velocidade').value;
+				I = document.getElementById('momento').value;
+				k = document.getElementById('const').value;
+
+				omega = Math.sqrt(k/I);
+
+				dt = 10;
+				time = 0;
+				update();
+				mhs = setInterval(update, dt);
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Simulação de um Pêndulo de Torção</h1>
+		<h2>LAB de FIS-26 - ITA</h2>
+		<h3 style='font-weight: normal; font-style:italic'>Gabriel Oliveira</h3>
+		<br/><br/>
+		<img src='pendulo.png' id='pendulo' />
+		<br/><br/><br/>
+		<p>(visão superior)</p>
+		<div>
+			<h3>Parâmetros</h3>
+			<p>&theta;<sub>0</sub> = <input type='number' name='angulo' id='angulo' placeholder='Ângulo inicial'></input> graus</p>
+			<p>&omega;<sub>0</sub> = <input type='number' name='velocidade' id='velocidade' placeholder='Velocidade Angular Inicial'></input> rad/s</p>
+			<p>I = <input type='number' name='momento' id='momento' placeholder='Momento de Inércia'></input> kg.m<sup>2</sup></p>
+			<p>k = <input type='number' name='const' id='const' placeholder='Constante de Torção'></input> kg.m<sup>2</sup>/s<sup>2</sup></p>
+			<p><input type='button' name='iniciar' value='Iniciar' onclick='start()'></input></p>
+			<p><input type='button' name='parar' value='Parar' onclick='clearInterval(mhs)'></input></p>
+			
+		</div>
+	</body>
+</html>
